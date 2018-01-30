@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.mule.api.MuleEvent;
 import org.mule.tck.junit4.FunctionalTestCase;
 import org.mule.tck.junit4.rule.DynamicPort;
 
@@ -17,6 +18,15 @@ public class HelloMavenTest extends FunctionalTestCase {
     	System.out.println("\n\nTestCase1: Dynamic Http Port " + myPort.getNumber() + "\n\n");
         runFlowAndExpect("mavenFlow", "Hello Maven");
     }
+    
+    @Test
+    public void retrieveFlightsAddsAppropriateHeader() throws Exception {
+      MuleEvent event = runFlow("retrieveFlights");
+      System.out.println("\n\nTestCase2: Dynamic Http Port " + myPort.getNumber() + "\n\n");
+      String contentType = event.getMessage().getOutboundProperty("Content-Type");
+      assertEquals("application/json", contentType);
+    }
+    
     
     @Override
     protected String getConfigFile() {
